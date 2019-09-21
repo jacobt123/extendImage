@@ -203,3 +203,56 @@ function installWLS()
     echo "#########################################################################################################"
 
 }
+
+#main script starts here
+
+CURR_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+export BASE_DIR="$(readlink -f ${CURR_DIR})"
+
+#if [ $# -ne 3 ]
+#then
+#    usage
+#    exit 1
+#fi
+
+export acceptOTNLicenseAgreement="Y"
+export otnusername="wlsqa.oracle@gmail.com"
+export otnpassword="wlsQA@1234"
+
+if [ -z "$acceptOTNLicenseAgreement" ];
+then
+        echo _stderr "acceptOTNLicenseAgreement is required. Value should be either Y/y or N/n"
+        exit 1
+fi
+
+if [[ ! ${acceptOTNLicenseAgreement} =~ ^[Yy]$ ]];
+then
+    echo "acceptOTNLicenseAgreement value not specified as Y/y (yes). Exiting installation Weblogic Server process."
+    exit 1
+fi
+
+if [[ -z "$otnusername" || -z "$otnpassword" ]]
+then
+        echo_stderr "otnusername or otnpassword is required. "
+        exit 1
+fi
+
+export WLS_VER="12.2.1.3.0"
+
+#add oracle group and user
+echo "Adding oracle user and group..."
+groupname="oracle"
+username="oracle"
+user_home_dir="/u01/oracle"
+USER_GROUP=${groupname}
+sudo groupadd $groupname
+sudo useradd -d ${user_home_dir} -g $groupname $username
+
+JDK_PATH="/u01/app/jdk"
+WLS_PATH="/u01/app/wls"
+
+#create custom directory for setting up wls and jdk
+sudo mkdir -p $JDK_PATH
+sudo mkdir -p $WLS_PATH
+sudo rm -rf $JDK_PATH/*
+sudo rm -rf $WLS_PATH/*
