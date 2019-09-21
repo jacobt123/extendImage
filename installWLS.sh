@@ -201,11 +201,11 @@ function installWLS()
 CURR_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 export BASE_DIR="$(readlink -f ${CURR_DIR})"
 
-if [ $# -ne 3 ]
-then
-    usage
-    exit 1
-fi
+#if [ $# -ne 3 ]
+#then
+#    usage
+#    exit 1
+#fi
 
 export acceptOTNLicenseAgreement="Y"
 export otnusername="wlsqa.oracle@gmail.com"
