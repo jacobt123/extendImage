@@ -269,3 +269,58 @@ curl -s https://raw.githubusercontent.com/typekpb/oradown/master/oradown.sh  | b
 #Download Weblogic install jar from OTN
 echo "Downloading weblogic install kit from OTN..."
 curl -s https://raw.githubusercontent.com/typekpb/oradown/master/oradown.sh  | bash -s -- --cookie=accept-weblogicserver-server --username="${otnusername}" --password="${otnpassword}" http://download.oracle.com/otn/nt/middleware/12c/12213/fmw_12.2.1.3.0_wls_Disk1_1of1.zip
+
+sudo chown -R $username:$groupname /u01/app
+
+sudo cp $BASE_DIR/fmw_12.2.1.3.0_wls_Disk1_1of1.zip $WLS_PATH/fmw_12.2.1.3.0_wls_Disk1_1of1.zip
+sudo cp $BASE_DIR/jdk-8u131-linux-x64.tar.gz $JDK_PATH/jdk-8u131-linux-x64.tar.gz
+
+echo "extracting and setting up jdk..."
+sudo tar -zxvf $JDK_PATH/jdk-8u131-linux-x64.tar.gz --directory $JDK_PATH
+sudo chown -R $username:$groupname $JDK_PATH
+
+export JAVA_HOME=$JDK_PATH/jdk1.8.0_131
+export PATH=$JAVA_HOME/bin:$PATH
+
+java -version
+
+if [ $? == 0 ];
+then
+    echo "JAVA HOME set succesfully."
+else
+    echo_stderr "Failed to set JAVA_HOME. Please check logs and re-run the setup"
+    exit 1
+fi
+
+echo "Installing zip unzip wget vnc-server rng-tools"
+sudo yum install -y zip unzip wget vnc-server rng-tools
+
+#Setting up rngd utils
+sudo systemctl enable rngd 
+sudo systemctl status rngd
+sudo systemctl start rngd
+sudo systemctl status rngd
+
+echo "unzipping fmw_12.2.1.3.0_wls_Disk1_1of1.zip..."
+sudo unzip -o $WLS_PATH/fmw_12.2.1.3.0_wls_Disk1_1of1.zip -d $WLS_PATH
+
+export SILENT_FILES_DIR=$WLS_PATH/silent-template
+sudo mkdir -p $SILENT_FILES_DIR
+sudo rm -rf $WLS_PATH/silent-template/*
+sudo chown -R $username:$groupname $WLS_PATH
+
+export INSTALL_PATH="$WLS_PATH/install"
+export WLS_JAR="$WLS_PATH/fmw_12.2.1.3.0_wls.jar"
+
+mkdir -p $INSTALL_PATH
+sudo chown -R $username:$groupname $INSTALL_PATH
+
+create_oraInstlocTemplate
+create_oraResponseTemplate
+create_oraUninstallResponseTemplate
+
+installWLS
+
+cleanup
+
+echo "Weblogic Server Installation Completed succesfully."
