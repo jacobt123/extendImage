@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 
 #Function to output message to StdErr
 function echo_stderr ()
