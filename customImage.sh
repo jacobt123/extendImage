@@ -260,3 +260,8 @@ sudo rm -rf $WLS_PATH/*
 
 cleanup
 
+#download jdk from OTN
+echo "Downloading jdk from OTN..."
+curl -s https://raw.githubusercontent.com/typekpb/oradown/master/oradown.sh  | bash -s -- --cookie=accept-weblogicserver-server --username="${otnusername}" --password="${otnpassword}" https://download.oracle.com/otn/java/jdk/8u131-b11/d54c1d3a095b4ff2b6607d096fa80163/jdk-8u131-linux-x64.tar.gz
+
+validateJDKZipCheckSum $BASE_DIR/jdk-8u131-linux-x64.tar.gz
