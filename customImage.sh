@@ -258,6 +258,3 @@ sudo rm -rf $JDK_PATH/*
 sudo rm -rf $WLS_PATH/*
 
 
-cleanup
-
-
