@@ -56,7 +56,7 @@ inst_group=[GROUP]
 EOF
 }
 
-#Function to create Weblogic Installation Response Template File for Silent Installation
+#This function will create a response file necessary to do a silent install of the product
 function create_oraResponseTemplate()
 {
 
