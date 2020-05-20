@@ -31,7 +31,8 @@ function setupInstallPath()
 function installUtilities()
 {
     echo "Installing zip unzip wget vnc-server rng-tools"
-    sudo yum install -y zip unzip wget vnc-server rng-tools
+    sudo yum install -y zip unzip wget vnc-server rng-tools cifs-utils
+  
 
     #Setting up rngd utils
     attempt=1
