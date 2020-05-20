@@ -30,9 +30,8 @@ function setupInstallPath()
 
 function installUtilities()
 {
-    echo "Installing zip unzip wget vnc-server rng-tools cifs-utils"
-    sudo yum install -y zip unzip wget vnc-server rng-tools cifs-utils
-  
+    echo "Installing zip unzip wget vnc-server rng-tools"
+    sudo yum install -y zip unzip wget vnc-server rng-tools
 
     #Setting up rngd utils
     attempt=1
@@ -712,7 +711,7 @@ function enableAndStartAdminServerService()
 CURR_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 export BASE_DIR="$(readlink -f ${CURR_DIR})"
 
-if [ $# -ne 8 ]
+if [ $# -ne 13 ]
 then
     usage
 	exit 1
@@ -726,6 +725,21 @@ export wlsUserName=$5
 export wlsPassword=$6
 export wlsServerName=$7
 export wlsAdminHost=$8
+export storageAccountName=$9
+export storageAccountKey=$10
+export shareName=$11
+export mountpointPath=$12
+export adminUsername=$13
+
+mkdir $mountpointPath
+mount -t cifs //$storageAccountName.file.core.windows.net/$shareName $mountpointPath -o vers=3.0,username=$storageAccountName,password=$storageAccountKey,dir_mode=0755,file_mode=0664
+# create a symlink from /mountpath/xxx to ~username/xxx
+linkpoint=`echo $mountpointPath | sed 's/.*\///'`
+eval ln -s $mountpointPath ~$adminUsername/$linkpoint
+
+# create marker files for testing
+echo "hello from $HOSTNAME" > $mountpointPath/$HOSTNAME.txt
+
 
 
 validateInput
