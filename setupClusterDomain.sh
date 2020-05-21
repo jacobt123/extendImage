@@ -713,8 +713,9 @@ export BASE_DIR="$(readlink -f ${CURR_DIR})"
 
 if [ $# -ne 13 ]
 then
-    usage
-	exit 1
+#    usage
+#	exit 1
+echo "=============== FAILED VALIDATION =============================="
 fi
 
 export acceptOTNLicenseAgreement=$1
