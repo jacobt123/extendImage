@@ -732,15 +732,6 @@ export shareName=$11
 export mountpointPath=$12
 export adminUsername=$13
 
-mkdir $mountpointPath
-mount -t cifs //$storageAccountName.file.core.windows.net/$shareName $mountpointPath -o vers=3.0,username=$storageAccountName,password=$storageAccountKey,dir_mode=0755,file_mode=0664
-# create a symlink from /mountpath/xxx to ~username/xxx
-linkpoint=`echo $mountpointPath | sed 's/.*\///'`
-eval ln -s $mountpointPath ~$adminUsername/$linkpoint
-
-# create marker files for testing
-echo "hello from $HOSTNAME" > $mountpointPath/$HOSTNAME.txt
-
 
 
 validateInput
@@ -792,3 +783,12 @@ else
 fi
 
 cleanup
+
+mkdir $mountpointPath
+mount -t cifs //$storageAccountName.file.core.windows.net/$shareName $mountpointPath -o vers=3.0,username=$storageAccountName,password=$storageAccountKey,dir_mode=0755,file_mode=0664
+# create a symlink from /mountpath/xxx to ~username/xxx
+linkpoint=`echo $mountpointPath | sed 's/.*\///'`
+eval ln -s $mountpointPath ~$adminUsername/$linkpoint
+
+# create marker files for testing
+echo "hello from $HOSTNAME" > $mountpointPath/$HOSTNAME.txt
