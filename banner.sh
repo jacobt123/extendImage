@@ -3,7 +3,7 @@
 # Add a banner 
 cat >> /etc/motd << EOF
 *******************************************************
-**                 Hello                             **
+**                 Hello there,                      **
 **      Welcome to a VM that was customized with     **
 **            the azure image builder                 **
 *******************************************************
